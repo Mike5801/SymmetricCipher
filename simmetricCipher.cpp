@@ -21,6 +21,27 @@ void printMatrix(vector<vector<char> > matrix, int sizeMatrix) {
     cout << endl;
 }
 
+void insertStringToMatrix(vector<vector<char> > &matrix, int sizeMatrix, string s) {
+    int limitMatrixRows = 0;
+    int limitMatrixColumns = 0;
+     if (s.length() < 16) {
+        while (s.length() < 16) {
+            s += " ";
+        }
+    }
+
+    for (int i = 0; i < s.length(); i++) {
+        if ((i + 1) % 4 == 0) {
+            matrix[limitMatrixRows][limitMatrixColumns] = s[i];
+            limitMatrixRows++;
+            limitMatrixColumns = 0;
+        } else {
+            matrix[limitMatrixRows][limitMatrixColumns] = s[i];
+            limitMatrixColumns++;
+        }
+    }
+}
+
 void rotateMatrixRows(vector<vector<char> > &matrix, int rowRotating, int sizeMatrix, int numRotations) {
     vector<char> auxRow;
 
@@ -77,8 +98,47 @@ void inverseRubiksCubeAlgorithm(vector<vector<char> > &matrix, int sizeMatrix) {
     rotateMatrixCol(matrix, 3, sizeMatrix, 1);
 }
 
+void moveMessageRows(vector<vector<char> > &matrix, int sizeMatrix) {
+    for (int i = 0; i < sizeMatrix; i++) {
+        switch(i) {
+            case 0:
+                rotateMatrixRows(matrix, i, sizeMatrix, 1);
+                break;
+            case 1:
+                rotateMatrixRows(matrix, i, sizeMatrix, 2);
+                break;
+            case 2:
+                rotateMatrixRows(matrix, i, sizeMatrix, 3);
+                break;
+            case 3:
+                rotateMatrixRows(matrix, i, sizeMatrix, 1);
+                break;
+            default:
+                break;
+        }
+    }
+}
 
-int main (int argc, char* argv[]) {
+void moveMessageColumns(vector<vector<char> > &matrix, int sizeMatrix) {
+    for (int i = 0; i < sizeMatrix; i++) {
+        switch(i) {
+            case 0:
+                rotateMatrixCol(matrix, i, sizeMatrix, 1);
+                break;
+            case 1:
+                rotateMatrixCol(matrix, i, sizeMatrix, 3);
+                break;
+            case 2:
+                rotateMatrixCol(matrix, i, sizeMatrix, 1);
+                break;
+            case 3:
+                rotateMatrixCol(matrix, i, sizeMatrix, 3);
+                break;
+        }
+    }
+}
+
+void messasgeSubstitution(vector<vector<char> > &matrix, int sizeMatrix) {
     unordered_map <char,char> alphabet;
 
     alphabet['a'] = 'k';
@@ -108,6 +168,15 @@ int main (int argc, char* argv[]) {
     alphabet['y'] = 'i';
     alphabet['z'] = 'q';
 
+    for (int i = 0; i < sizeMatrix; i++) {
+        for (int j = 0; j < sizeMatrix; j++) {
+            matrix[i][j] = alphabet[matrix[i][j]];
+        }
+    }
+
+}
+
+int main (int argc, char* argv[]) {
     string privateKey = "X4n17Az365lIjk8m";
     vector<vector<char> > privateKeyMatrix {
         {'a','b','c','d'},
@@ -115,23 +184,10 @@ int main (int argc, char* argv[]) {
         {'i','j','k','l'},
         {'m','n','o','p'}
     };
-
     int const sizeMatrix = 4;
-    int limitMatrixRows = 0;
-    int limitMatrixColumns = 0;
 
-    for (int k = 0; k < privateKey.length(); k++) {
-        if ((k + 1) % 4 == 0) {
-            privateKeyMatrix[limitMatrixRows][limitMatrixColumns] = privateKey[k];
-            limitMatrixRows++;
-            limitMatrixColumns = 0;
-        } else {
-            privateKeyMatrix[limitMatrixRows][limitMatrixColumns] = privateKey[k];
-            limitMatrixColumns++;
-        }
-    }
-
-    vector<vector<char> > privateKeyMatrixCopy = privateKeyMatrix;
+    insertStringToMatrix(privateKeyMatrix, sizeMatrix, privateKey);
+    //printMatrix(privateKeyMatrix, sizeMatrix);
 
     string message;
     vector<vector<char> > messageMatrix {
@@ -146,31 +202,15 @@ int main (int argc, char* argv[]) {
     if (message.length() > 16) {
         //add code if message is larger than 16 characters
     } else {
-        if (message.length() < 16) {
-            while (message.length() < 16) {
-                message += " ";
-            }
-        }
-
-        limitMatrixRows = 0;
-        limitMatrixColumns = 0;
-
-        for (int k = 0; k < message.length(); k++) {
-            if ((k + 1) % 4 == 0) {
-                messageMatrix[limitMatrixRows][limitMatrixColumns] = message[k];
-                limitMatrixRows++;
-                limitMatrixColumns = 0;
-            } else {
-                messageMatrix[limitMatrixRows][limitMatrixColumns] = message[k];
-                limitMatrixColumns++;
-            }
-        }
-        //printMatrix(messageMatrix, sizeMatrix);
+        insertStringToMatrix(messageMatrix, sizeMatrix, message);
+        printMatrix(messageMatrix, sizeMatrix);
+        moveMessageRows(messageMatrix, sizeMatrix);
+        moveMessageColumns(messageMatrix, sizeMatrix);
+        messasgeSubstitution(messageMatrix, sizeMatrix);
+        printMatrix(messageMatrix, sizeMatrix);
+        //implement XOR
     }
-
-
-
-
-   return 0;
+ 
+    return 0;
 
 }
