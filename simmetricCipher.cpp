@@ -67,7 +67,6 @@ void decipher(vector<vector<char> > &messageMatrix, vector<vector<char> > &priva
     };
 
     inverseRubiksCubeAlgorithm(privateKeyMatrix, sizeMatrix);
-    // printMatrix(privateKeyMatrix, sizeMatrix);
     messageBinAux = getBinaryMatrix(messageMatrix, sizeMatrix);
     privateKeyBinAux = getBinaryMatrix(privateKeyMatrix, sizeMatrix);
     // cout << "Private key binary: " << endl;
@@ -88,7 +87,6 @@ void decipher(vector<vector<char> > &messageMatrix, vector<vector<char> > &priva
     // cout << "Inverse move rows:" << endl;
     // printMatrix(messageMatrix, sizeMatrix);
     printMatrixAsString(messageMatrix, sizeMatrix);
-
 }
 
 int main (int argc, char* argv[]) {
@@ -122,7 +120,6 @@ int main (int argc, char* argv[]) {
     insertStringToMatrix(privateKeyMatrix, sizeMatrix, privateKey);
     insertStringToMatrix(copyPrivateKeyMatrixCipher, sizeMatrix, privateKey);
     insertStringToMatrix(copyPrivateKeyMatrixDecipher, sizeMatrix, privateKey);
-    //printMatrix(privateKeyMatrix, sizeMatrix);
     
     string message;
 
@@ -146,7 +143,6 @@ int main (int argc, char* argv[]) {
 
     cout << "************************************************************** CIPHER **************************************************************" << endl << endl;
     if (message.length() > 16) {
-        //add code if message is larger than 16 characters
         vector<vector<vector<char> > > cipheredMatrixes;
         vector<vector<vector<char> > > decipheredMatrixes;
 
@@ -168,7 +164,7 @@ int main (int argc, char* argv[]) {
 
         messageTrim = message.substr(remainingChars, message.length());
         insertStringToMatrix(messageMatrix, sizeMatrix, messageTrim);
-        cout << "---------------------------------------- BLOCK " << stringLimit + 1 << "--------------------------------------------" << endl;
+        cout << "---------------------------------------- BLOCK " << stringLimit << " --------------------------------------------" << endl;
         for (int i = 0; i < rounds; i++) {
             cout << ".................. ROUND " << i << " .................." << endl;
             cout << "Cipher result: " << endl;
@@ -180,7 +176,7 @@ int main (int argc, char* argv[]) {
         for (int i = 0; i < cipheredMatrixes.size(); i++) {
             for (int j = 0; j < sizeMatrix; j++) {
                 for (int k = 0; k < sizeMatrix; k++) {
-                    cout << cipheredMatrixes[i][j][k];
+                    cout << cipheredMatrixes[i][j][k] << flush;
                 }
             }
         }
@@ -206,7 +202,7 @@ int main (int argc, char* argv[]) {
             for (int j = 0; j < sizeMatrix; j++) {
                 for (int k = 0; k < sizeMatrix; k++) {
                     if (decipheredMatrixes[i][j][k] != '_') {
-                        cout << decipheredMatrixes[i][j][k];
+                        cout << decipheredMatrixes[i][j][k] << flush;
                     }
                 }
             }
@@ -241,7 +237,6 @@ int main (int argc, char* argv[]) {
                 }
             }
         }
-        //printMatrixAsString(messageMatrix, sizeMatrix);
         cout << endl;
     }
 
