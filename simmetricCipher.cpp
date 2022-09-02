@@ -4,90 +4,9 @@ Alejandro Ruíz García Rojas
 Miguel Weiping Tang Feng
 */
 #include <iostream>
+#include <fstream>
 #include "cipher.h"
 #include "decipher.h"
-
-void cipher(vector<vector<char> > &messageMatrix, vector<vector<char> > &privateKeyMatrix, int sizeMatrix) {
-    bitset<8> auxBit(1);
-
-    vector<vector<bitset<8> > > privateKeyBinaryMatrix {
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit}
-    };
-
-    vector<vector<bitset<8> > > messageBinaryMatrix {
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit}
-    };
-
-    moveMessageRows(messageMatrix, sizeMatrix);
-    // cout << "Move rows:" << endl; 
-    // printMatrix(messageMatrix, sizeMatrix);
-    moveMessageColumns(messageMatrix, sizeMatrix);
-    // cout << "Move columns:" << endl; 
-    // printMatrix(messageMatrix, sizeMatrix);
-    messageSubstitution(messageMatrix, sizeMatrix);
-    // cout << "Substitute matrix" << endl; 
-    // printMatrix(messageMatrix, sizeMatrix);
-    privateKeyBinaryMatrix = getBinaryMatrix(privateKeyMatrix, sizeMatrix);
-    // cout << "Binary private key" << endl; 
-    // printBinaryMatrix(privateKeyBinaryMatrix, sizeMatrix);
-    messageBinaryMatrix = getBinaryMatrix(messageMatrix, sizeMatrix);
-    // cout << "Binary message:" << endl; 
-    // printBinaryMatrix(messageBinaryMatrix, sizeMatrix);
-    xorBinaryMatrixes(messageBinaryMatrix, privateKeyBinaryMatrix, sizeMatrix);
-    // cout << "Binary XOR:" << endl; 
-    // printBinaryMatrix(messageBinaryMatrix, sizeMatrix);
-    messageMatrix = getCharMatrix(messageBinaryMatrix, sizeMatrix);
-    // cout << "Cipher message matrix:" << endl; 
-    printMatrixAsString(messageMatrix, sizeMatrix);
-    privateKeyMatrix = getCharMatrix(privateKeyBinaryMatrix, sizeMatrix);
-    rubiksCubeAlgorithm(privateKeyMatrix, sizeMatrix);
-}
-
-void decipher(vector<vector<char> > &messageMatrix, vector<vector<char> > &privateKeyMatrix, int sizeMatrix) {
-    bitset<8> auxBit(1);
-
-    vector<vector<bitset<8> > > messageBinAux {
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit}
-    };
-
-    vector<vector<bitset<8> > > privateKeyBinAux {
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit},
-        {auxBit, auxBit, auxBit, auxBit}
-    };
-
-    inverseRubiksCubeAlgorithm(privateKeyMatrix, sizeMatrix);
-    messageBinAux = getBinaryMatrix(messageMatrix, sizeMatrix);
-    privateKeyBinAux = getBinaryMatrix(privateKeyMatrix, sizeMatrix);
-    // cout << "Private key binary: " << endl;
-    // printBinaryMatrix(privateKeyBinAux, sizeMatrix);
-    xorBinaryMatrixes(messageBinAux, privateKeyBinAux, sizeMatrix);
-    // cout << "Binary inverse XOR: " << endl;
-    // printBinaryMatrix(messageBinAux, sizeMatrix);
-    messageMatrix = getCharMatrix(messageBinAux, sizeMatrix);
-    // cout << "Inverse XOR: " << endl;
-    // printMatrix(messageMatrix, sizeMatrix);
-    inverseMessageSubstitution(messageMatrix, sizeMatrix);
-    // cout << "Inverse substitution: " << endl;
-    // printMatrix(messageMatrix, sizeMatrix);
-    inverseMoveMessageColumns(messageMatrix, sizeMatrix);
-    // cout << "Inverse move columns: " << endl;
-    // printMatrix(messageMatrix, sizeMatrix);
-    inverseMoveMessageRows(messageMatrix, sizeMatrix);
-    // cout << "Inverse move rows:" << endl;
-    // printMatrix(messageMatrix, sizeMatrix);
-    printMatrixAsString(messageMatrix, sizeMatrix);
-}
 
 int main (int argc, char* argv[]) {
     //string privateKey = "X4n17Az365lIjk8m";

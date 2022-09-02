@@ -174,3 +174,45 @@ void messageSubstitution(vector<vector<char> > &matrix, int sizeMatrix) {
         }
     }
 }
+
+void cipher(vector<vector<char> > &messageMatrix, vector<vector<char> > &privateKeyMatrix, int sizeMatrix) {
+    bitset<8> auxBit(1);
+
+    vector<vector<bitset<8> > > privateKeyBinaryMatrix {
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit}
+    };
+
+    vector<vector<bitset<8> > > messageBinaryMatrix {
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit}
+    };
+
+    moveMessageRows(messageMatrix, sizeMatrix);
+    // cout << "Move rows:" << endl; 
+    // printMatrix(messageMatrix, sizeMatrix);
+    moveMessageColumns(messageMatrix, sizeMatrix);
+    // cout << "Move columns:" << endl; 
+    // printMatrix(messageMatrix, sizeMatrix);
+    messageSubstitution(messageMatrix, sizeMatrix);
+    // cout << "Substitute matrix" << endl; 
+    // printMatrix(messageMatrix, sizeMatrix);
+    privateKeyBinaryMatrix = getBinaryMatrix(privateKeyMatrix, sizeMatrix);
+    // cout << "Binary private key" << endl; 
+    // printBinaryMatrix(privateKeyBinaryMatrix, sizeMatrix);
+    messageBinaryMatrix = getBinaryMatrix(messageMatrix, sizeMatrix);
+    // cout << "Binary message:" << endl; 
+    // printBinaryMatrix(messageBinaryMatrix, sizeMatrix);
+    xorBinaryMatrixes(messageBinaryMatrix, privateKeyBinaryMatrix, sizeMatrix);
+    // cout << "Binary XOR:" << endl; 
+    // printBinaryMatrix(messageBinaryMatrix, sizeMatrix);
+    messageMatrix = getCharMatrix(messageBinaryMatrix, sizeMatrix);
+    // cout << "Cipher message matrix:" << endl; 
+    printMatrixAsString(messageMatrix, sizeMatrix);
+    privateKeyMatrix = getCharMatrix(privateKeyBinaryMatrix, sizeMatrix);
+    rubiksCubeAlgorithm(privateKeyMatrix, sizeMatrix);
+}

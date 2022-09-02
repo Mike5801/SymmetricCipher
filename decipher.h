@@ -180,3 +180,44 @@ void inverseMessageSubstitution(vector<vector<char> > &matrix, int sizeMatrix) {
         }
     }
 }
+
+
+void decipher(vector<vector<char> > &messageMatrix, vector<vector<char> > &privateKeyMatrix, int sizeMatrix) {
+    bitset<8> auxBit(1);
+
+    vector<vector<bitset<8> > > messageBinAux {
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit}
+    };
+
+    vector<vector<bitset<8> > > privateKeyBinAux {
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit},
+        {auxBit, auxBit, auxBit, auxBit}
+    };
+
+    inverseRubiksCubeAlgorithm(privateKeyMatrix, sizeMatrix);
+    messageBinAux = getBinaryMatrix(messageMatrix, sizeMatrix);
+    privateKeyBinAux = getBinaryMatrix(privateKeyMatrix, sizeMatrix);
+    // cout << "Private key binary: " << endl;
+    // printBinaryMatrix(privateKeyBinAux, sizeMatrix);
+    xorBinaryMatrixes(messageBinAux, privateKeyBinAux, sizeMatrix);
+    // cout << "Binary inverse XOR: " << endl;
+    // printBinaryMatrix(messageBinAux, sizeMatrix);
+    messageMatrix = getCharMatrix(messageBinAux, sizeMatrix);
+    // cout << "Inverse XOR: " << endl;
+    // printMatrix(messageMatrix, sizeMatrix);
+    inverseMessageSubstitution(messageMatrix, sizeMatrix);
+    // cout << "Inverse substitution: " << endl;
+    // printMatrix(messageMatrix, sizeMatrix);
+    inverseMoveMessageColumns(messageMatrix, sizeMatrix);
+    // cout << "Inverse move columns: " << endl;
+    // printMatrix(messageMatrix, sizeMatrix);
+    inverseMoveMessageRows(messageMatrix, sizeMatrix);
+    // cout << "Inverse move rows:" << endl;
+    // printMatrix(messageMatrix, sizeMatrix);
+    printMatrixAsString(messageMatrix, sizeMatrix);
+}
